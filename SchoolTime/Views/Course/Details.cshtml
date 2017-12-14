@@ -1,0 +1,162 @@
+﻿@model SchoolTime.Models.uv_Course
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Details</title>
+</head>
+<body>
+    <div>
+        <h4>uv_Course</h4>
+        <hr />
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.CourseYear)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.CourseYear)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.Semester)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.Semester)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.FullNameT)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.FullNameT)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.SujectID)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.SujectID)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.SujectName)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.SujectName)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.TimeLate)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.TimeLate)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.NumCheckIN)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.NumCheckIN)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.Entitled)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.Entitled)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.NotEntitled)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.NotEntitled)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.Contact)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.Contact)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.CourseDTID)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.CourseDTID)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.StudID)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.StudID)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.StudCode)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.StudCode)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.FullNameS)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.FullNameS)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.MinorID)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.MinorID)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.MinorCode)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.MinorCode)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.MinorName)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.MinorName)
+            </dd>
+    
+        </dl>
+    </div>
+    <p>
+        @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
+        @Html.ActionLink("Back to List", "Index")
+    </p>
+</body>
+</html>

@@ -1,0 +1,533 @@
+﻿@model SchoolTime.Models.uv_Course
+
+<link href="~/Content/jquery.dataTables.min.css" rel="stylesheet">
+<link href="~/Content/dataTables.bootstrap.min.css" rel="stylesheet">
+<script type="text/javascript" src="~/Scripts/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="~/Scripts/jquery.timepicker.min.js"></script>
+
+    @using (Html.BeginForm()) 
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-horizontal">
+            <h4>tblCourseHD</h4>
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.CourseCode, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.CourseCode, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.CourseCode, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.SujectID, "SujectID", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.SujectID, new { htmlAttributes = new { type = "hidden", @class = "form-control", style = "display: table-cell;" } })
+                    @Html.Editor("SujectName", new { htmlAttributes = new { type = "text", @class = "form-control", style = "display: table-cell;" } })
+                    @*@Html.EditorFor(model => model.tblSuject.SujectName, new { htmlAttributes = new { @class = "form-control", style = "display: table-cell;" } })*@
+                    @Html.ValidationMessageFor(model => model.SujectID, "", new { @class = "text-danger" })
+                    <a data-toggle="modal" href="#SujectsGridModal" class="btn btn-primary">เลือกรายวิชา</a>
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.CourseYear, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.CourseYear, new { htmlAttributes = new { @class = "form-control", @Max = 2200, @Min = 1900 } })
+                    @Html.ValidationMessageFor(model => model.CourseYear, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Semester, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Semester, new { htmlAttributes = new { @class = "form-control", @Max = 3, @Min = 1 } })
+                    @Html.ValidationMessageFor(model => model.Semester, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.teachID, "teachID", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.teachID, new { htmlAttributes = new { type = "hidden", @class = "form-control", style = "display: table-cell;" } })
+                    @*@Html.EditorFor(model => model.tblTeacher.FullName, new { htmlAttributes = new { @class = "form-control", style = "display: table-cell;" } })*@
+                    @Html.Editor("TeacherFullName", new { htmlAttributes = new { type = "text", @class = "form-control", style = "display: table-cell;" } })
+                    @Html.ValidationMessageFor(model => model.teachID, "", new { @class = "text-danger" })
+                    <a data-toggle="modal" href="#TeacherGridModal" class="btn btn-primary">เลือกอาจารย์</a>
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.TimeStart, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.TimeStart_txt, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.TimeStart, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.TimeEnd, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.TimeEnd_txt, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.TimeEnd, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.TimeLate, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.TimeLate, new { htmlAttributes = new { @class = "form-control", @Max = 60, @Min = 0 } })
+                    @Html.ValidationMessageFor(model => model.TimeLate, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.NumCheckIN, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.NumCheckIN, new { htmlAttributes = new { @class = "form-control", @Max = 40, @Min = 20 } })
+                    @Html.ValidationMessageFor(model => model.NumCheckIN, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Entitled, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Entitled, new { htmlAttributes = new { @class = "form-control", @Max = 100, @Min = 0 } })
+                    @Html.ValidationMessageFor(model => model.Entitled, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.NotEntitled, htmlAttributes: new { @class = "control-label col-md-2", @Max = 100, @Min = 0 })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.NotEntitled, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.NotEntitled, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Contact, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Contact, new { htmlAttributes = new { @class = "form-control", @Max = 100, @Min = 0 } })
+                    @Html.ValidationMessageFor(model => model.Contact, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-control">
+                <table id="tabledetail" class="table table-hover table-bordered">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>รหัสนักศึกษา</th>
+                            <th>ชื่อ- สกุล</th>
+                            <th>สาขาวิชา</th>
+                        </tr>
+                    </thead>
+                    <tfoot>
+                        <tr>
+                            <td></td>
+                            <td><a data-toggle="modal" href="#StudentGridModal" class="btn btn-primary">Launch modal</a></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-offset-0 col-md-10">
+                    <input type="submit" value="Create" onclick="Course_save()" class="btn btn-warning" />
+                    @Html.ActionLink("Back to List", "Index", "", new { @class = "btn btn-info" })
+                </div>
+            </div>
+        </div>
+    }
+    
+
+
+    <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" id="StudentGridModal">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>ข้อมูลนักศึกษา</h3>
+                </div>
+                <div class="modal-body">
+                    <table id="modelStudent" class="table table-hover table-bordered" style="width:100%">
+                        <thead>
+                            <tr>
+                                <td></td>
+                                <td>รหัสนักศึกษา</td>
+                                <td>ชื่อ - สกุล</td>
+                                <td>สาขาวิชา</td>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+                <div class="modal-footer">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" id="SujectsGridModal">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>ข้อมูลวิชา</h3>
+                </div>
+                <div class="modal-body">
+                    <table id="modelSuject" class="table table-hover table-bordered" style="width:100%">
+                        <thead>
+                            <tr>
+                                <td></td>
+                                <td>รหัสวิชา</td>
+                                <td>ชื่อรายวิชา</td>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+                <div class="modal-footer">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" id="TeacherGridModal">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>ข้อมูลอาจาร์</h3>
+                </div>
+                <div class="modal-body">
+                    <table id="modelTeacher" class="table table-hover table-bordered">
+                        <thead>
+                            <tr>
+                                <td></td>
+                                <td>รหัสอาจาร์</td>
+                                <td>ชื่อ - สกุล</td>
+                                <td>สาขาวิชา</td>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+                <div class="modal-footer">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+
+        $(function () {
+
+            $('#TimeStart_txt').timepicker({
+                timeFormat: 'HH:mm',
+                interval: 1,
+                minTime: '1',
+                maxTime: '11:59pm',
+                defaultTime: '8',
+                startTime: '10:00',
+                dynamic: false,
+                dropdown: false,
+                scrollbar: false
+            });
+
+            $('#TimeEnd_txt').timepicker({
+                timeFormat: 'HH:mm',
+                interval: 1,
+                minTime: '1',
+                maxTime: '11:59pm',
+                defaultTime: '8',
+                startTime: '10:00',
+                dynamic: false,
+                dropdown: false,
+                scrollbar: false
+            });
+
+            var tabledetail = $('#tabledetail').DataTable({
+                "columnDefs": [
+                    {
+                        "targets": [0],
+                        "visible": false,
+                        "searchable": false
+                    }
+                ]
+            });
+
+            $('#tabledetail tbody').on('click', 'tr', function () {
+                if ($(this).hasClass('selected')) {
+                    $(this).removeClass('selected');
+                }
+                else {
+                    tabledetail.$('tr.selected').removeClass('selected');
+                    $(this).addClass('selected');
+                }
+            });
+
+            $('#tabledetail tbody').on('dblclick', 'tr', function () {
+                var rows = tabledetail
+                    .rows(this)
+                    .remove()
+                    .draw();
+            });
+
+
+            $.ajax({
+                type: 'POST',
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                url: 'getStudents',
+                success: function (result) {
+                    debugger;
+                    var addTR = "";
+                    for (var i = 0; i < result.length; i++) {
+                        //addTR = "<tr ondblclick ='addrows'>";
+                        addTR = "<tr><td>" + result[i].StudID + "</td>";;
+                        addTR += "<td>" + result[i].StudCode + "</td>";
+                        addTR += "<td>" + result[i].FullName + "</td>";
+                        addTR += "<td>" + result[i].MinorName + "</td>";
+                        addTR += "</tr>";
+                        $('#modelStudent').append(addTR);
+                        //$("#modelStudent").html(addTR);
+                        //localStorage.setItem("LocHD", JSON.stringify(data));
+                    }
+
+                    var tableStudent = $('#modelStudent').DataTable({
+                        "columnDefs": [
+                            {
+                                "targets": [0],
+                                "visible": false,
+                                "searchable": false
+                            }
+                        ]
+                    });
+
+                    $('#modelStudent tbody').on('click', 'tr', function () {
+                        if ($(this).hasClass('selected')) {
+                            $(this).removeClass('selected');
+                        }
+                        else {
+                            tableStudent.$('tr.selected').removeClass('selected');
+                            $(this).addClass('selected');
+                        }
+                    });
+
+                    $('#modelStudent tbody').on('dblclick', 'tr', function () {
+                        var data = tableStudent.row(this).data();
+
+                        var datadetail = $('#tabledetail').DataTable();
+
+
+                        //gets table
+                        var oTable = $('#tabledetail').dataTable().fnGetData();
+                        var IsCheck = true;
+
+
+                        for (var i = 0; i < oTable.length; i++) {
+
+                            if (oTable[i][0] == data[0]) {
+                                IsCheck = false;
+                                break;
+                            }
+                        }
+
+                        if (IsCheck) {
+                            datadetail.row.add([
+                                data[0],
+                                data[1],
+                                data[2],
+                                data[3]
+
+                            ]).draw(false);
+                        } else {
+                            alert('รหัสนักศึกษาซ้ำ !!');
+                        }
+
+                        $('#StudentGridModal').modal('hide');
+                    });
+                },
+                error: function (reresponse) {
+                    debugger;
+                    alert(reresponse);
+                }
+            });
+
+            $.ajax({
+                type: 'POST',
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                url: 'getSujects',
+                success: function (result) {
+                    debugger;
+                    var addTR = "";
+                    for (var i = 0; i < result.length; i++) {
+                        addTR = "<tr><td>" + result[i].SujectID + "</td>";
+                        addTR += "<td>" + result[i].SujectCode + "</td>";
+                        addTR += "<td>" + result[i].SujectName + "</td>";
+                        addTR += "</tr>";
+                        $('#modelSuject').append(addTR);
+
+                    }
+                    var tableSuject = $('#modelSuject').DataTable({
+                        "columnDefs": [
+                            {
+                                "targets": [0],
+                                "visible": false,
+                                "searchable": false
+                            }
+                        ],
+                        autoFill: true
+                    });
+
+                    $('#modelSuject tbody').on('click', 'tr', function () {
+                        if ($(this).hasClass('selected')) {
+                            $(this).removeClass('selected');
+                        }
+                        else {
+                            table.$('tr.selected').removeClass('selected');
+                            $(this).addClass('selected');
+                        }
+                    });
+
+                    $('#modelSuject tbody').on('dblclick', 'tr', function () {
+                        var data = tableSuject.row(this).data();
+                        $("#SujectName").val(data[2]);
+                        $("#SujectID").val(data[0]);
+                        $('#SujectsGridModal').modal('hide');
+                    });
+
+
+                },
+                error: function (reresponse) {
+                    debugger;
+                    alert(reresponse);
+                }
+            });
+
+            $.ajax({
+                type: 'POST',
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                url: 'getTeachers',
+                success: function (result) {
+                    debugger;
+                    var addTR = "";
+                    for (var i = 0; i < result.length; i++) {
+                        addTR = "<tr><td>" + result[i].teachID + "</td>";
+                        addTR += "<td>" + result[i].teachCode + "</td>";
+                        addTR += "<td>" + result[i].FullName + "</td>";
+                        addTR += "<td>" + result[i].MajorName + "</td>";
+                        addTR += "</tr>";
+                        $('#modelTeacher').append(addTR);
+
+                    }
+                    var tableTeacher = $('#modelTeacher').DataTable({
+                        "columnDefs": [
+                            {
+                                "targets": [0],
+                                "visible": false,
+                                "searchable": false
+                            }
+                        ],
+                        autoFill: true
+                    });
+
+                    $('#modelTeacher tbody').on('click', 'tr', function () {
+                        if ($(this).hasClass('selected')) {
+                            $(this).removeClass('selected');
+                        }
+                        else {
+                            table.$('tr.selected').removeClass('selected');
+                            $(this).addClass('selected');
+                        }
+                    });
+
+                    $('#modelTeacher tbody').on('dblclick', 'tr', function () {
+                        var data = tableTeacher.row(this).data();
+
+                        $("#TeacherFullName").val(data[2]);
+                        $("#teachID").val(data[0]);
+                        $('#TeacherGridModal').modal('hide');
+                    });
+
+
+                },
+                error: function (reresponse) {
+                    debugger;
+                    alert(reresponse);
+                }
+            });
+        });
+
+        function Course_save() {
+            // Step 1: Read View Data and Create JSON Object
+
+            //SujectID, CourseCode, CourseYear, Semester, teachID, TimeStart, TimeStart_txt, TimeEnd, TimeEnd_txt, TimeLate, NumCheckIN,
+            //    Entitled, NotEntitled, Contact
+
+            // Creating SalesSub Json Object
+            var tblCourseDTs = { "StudID": "" };
+
+
+            // Creating CourseHD Json Object
+            var tblCourseHD = {
+                "CourseCode": "", "SujectID": "", "CourseYear": "", "Semester": "",
+                "teachID": "", "TimeStart_txt": "", "TimeEnd_txt": "", "TimeLate": "", "NumCheckIN": "",
+                "Entitled": "", "NotEntitled": "", "Contact": "", "tblCourseDTs": []
+            };
+
+            // Set Sales Main Value
+            tblCourseHD.CourseCode = $("#CourseCode").val();
+            tblCourseHD.SujectID = $("#SujectID").val();
+            tblCourseHD.CourseYear = $("#CourseYear").val();
+            tblCourseHD.Semester = $("#Semester").val();
+            tblCourseHD.teachID = $("#teachID").val();
+            tblCourseHD.TimeStart_txt = $("#TimeStart_txt").val();
+            tblCourseHD.TimeEnd_txt = $("#TimeEnd_txt").val();
+            tblCourseHD.TimeLate = $("#TimeLate").val();
+            tblCourseHD.NumCheckIN = $("#NumCheckIN").val();
+            tblCourseHD.Entitled = $("#Entitled").val();
+            tblCourseHD.NotEntitled = $("#NotEntitled").val();
+            tblCourseHD.Contact = $("#Contact").val();
+
+
+
+            // Getting Table Data from where we will fetch Sales Sub Record
+            var oTable = $('#tabledetail').dataTable().fnGetData();
+
+
+            for (var i = 0; i < oTable.length; i++) {
+                // Set tblCourseDTs individual Value
+                tblCourseDTs.StudID = oTable[i][0];
+                // adding to tblCourseHD.tblCourseDTs List Item
+                tblCourseHD.tblCourseDTs.push(tblCourseDTs);
+                tblCourseDTs = { "StudID": "" };
+            }
+            // Step 1: Ends Here
+
+
+            // Set 2: Ajax Post
+            // Here i have used ajax post for saving/updating information
+            $.ajax({
+                url: '/tblCourseHDs/Create',
+                data: JSON.stringify(tblCourseHD),
+                type: 'POST',
+                contentType: 'application/json;',
+                dataType: 'json',
+                success: function (result) {
+
+                    if (result.Success == "1") {
+                        window.location.href = "/tblCourseHDs/index";
+                    }
+                }
+            });
+        }
+
+    </script>

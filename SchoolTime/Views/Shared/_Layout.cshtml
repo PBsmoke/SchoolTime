@@ -1,0 +1,153 @@
+﻿@{
+    var TempRelateTable = "";
+    var TempRelateEmpID = "";
+}
+
+@if (!string.IsNullOrEmpty(Session["relateTable"] as string))
+{
+    TempRelateTable = Session["relateTable"].ToString();
+}
+
+@if (!string.IsNullOrEmpty(Session["relateID"] as string))
+{
+    TempRelateEmpID = Session["relateID"].ToString();
+}
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - SchoolTime</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+</head>
+<body>
+
+    @if (string.IsNullOrEmpty(Session["UserID"] as string))
+    {
+        //@Url.Action("Login", "Home")
+        Response.Redirect(Url.Action("Login", "Home"));
+    }
+    <div class="navbar navbar-inverse navbar-fixed-top" style="background-color:#353940">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+
+                @Html.ActionLink("SchoolTime", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+            </div>
+            <div class="navbar-collapse collapse sidebar-navbar-collapse">
+                <ul class="nav navbar-nav">
+                    @*<li>@Html.ActionLink("Home", "Index", "Home")</li>*@
+
+                    @if (TempRelateTable != "tblStudent")
+                    {
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            หลักสูตร และสาขาวิชา
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>@Html.ActionLink("หลักสูตร", "Index", "tblMajors")</li>
+                            <li>@Html.ActionLink("สาขาวิชา", "Index", "tblMinors")</li>
+                            <li>@Html.ActionLink("รายชื่อวิชา", "Index", "tblSujects")</li>
+                        </ul>
+                    </li>
+                    }
+
+                    @if (TempRelateTable.ToLower() == "admin")
+                    {
+                        <li>@Html.ActionLink("ข้อมูลอาจารย์", "Index", "tblTeachers")</li>
+                    }
+                    else if (TempRelateTable == "tblTeacher")
+                    {
+                        @*<li>Html.ActionLink("ข้อมูล อาจารย์", "Details", "tblTeachers", new { id = TempRelateEmpID })</li>*@
+
+                        <li>
+                            @Html.ActionLink("ข้อมูลอาจารย์",
+                                        "Details",   // <-- ActionMethod
+                                        "tblTeachers",  // <-- Controller Name.
+                                        new { id = TempRelateEmpID }, // <-- Route arguments.
+                                        null  // <-- htmlArguments .. which are none. You need this value
+                                              //     otherwise you call the WRONG method ...
+                                              //     (refer to comments, below).
+                                        )</li>
+                        }
+
+                        @if (TempRelateTable != "tblStudent")
+                        {
+                            <li>@Html.ActionLink("ข้อมูลนักศึกษา", "Index", "tblStudents")</li>
+                        }
+                    else
+                    {
+                        <li>
+                            @Html.ActionLink("ข้อมูลนักศึกษา",
+                                        "Details",   // <-- ActionMethod
+                                        "tblStudents",  // <-- Controller Name.
+                                        new { id = TempRelateEmpID }, // <-- Route arguments.
+                                        null  // <-- htmlArguments .. which are none. You need this value
+                                              //     otherwise you call the WRONG method ...
+                                              //     (refer to comments, below).
+                                        )
+                        </li>
+                        }
+                        
+                    @if (TempRelateTable == "tblStudent")
+                    {
+                        <li>@Html.ActionLink("ราชวิชาที่เปิดสอน", "StudentsIndex", "tblCourseHDs")</li>
+                        <li>@Html.ActionLink("ราชวิชาที่เปิดสอน(รวม)", "DetailsStudents", "tblCourseHDs")</li>
+                    }
+                    else if (TempRelateTable == "tblTeacher")
+                    {
+                        <li>@Html.ActionLink("ราชวิชาที่เปิดสอน", "Index", "tblCourseHDs")</li>                      
+                    }
+                    else
+                    {
+                        <li>@Html.ActionLink("ราชวิชาที่เปิดสอน", "Index", "tblCourseHDs")</li>
+                    }
+
+                    @if (TempRelateTable.ToLower() == "admin")
+                    {
+                        <li>@Html.ActionLink("รหัสผู้ใช้งาน", "Index", "Users")</li>
+                    }
+
+
+                    @*<li>@Html.ActionLink("About", "About", "Home")</li>
+                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>*@
+                    
+                </ul>
+                <div class="text-right" style="margin-top: 10px">
+                    <a href="/Home/Logout" class="btn btn-danger btn-sm">
+                        <span class="glyphicon glyphicon-log-out"></span> Log out
+                    </a>
+                </div>
+                
+                    
+
+            </div>
+        </div>
+    </div>
+    <div class="container body-content" style="margin-top:10px">
+        <div class="well">
+            @RenderBody()
+        </div>
+        <hr />
+        <footer>
+            <p>&copy; @DateTime.Now.Year - SchoolTime Application</p>
+        </footer>
+    </div>
+
+    
+    @RenderSection("scripts", required: false)
+
+    <!-- Be sure this is after jquery reference -->
+    <script src="~/MVCGridHandler.axd/script.js"></script>
+</body>
+</html>

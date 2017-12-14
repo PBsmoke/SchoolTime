@@ -1,0 +1,41 @@
+﻿@model SchoolTime.Models.tblMajor
+
+@{
+    ViewBag.Title = "หลักสูตร";
+}
+
+<h2>หลักสูตร</h2>
+<hr />
+<div>
+
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayName("รหัสหลักสูตร")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MajorCode)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("ชื่อหลักสูตร")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MajorName)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("รายละเอียดหลักสูตร")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MajorDetail)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.MajorID }, new { @class = "btn btn-warning" })
+    @Html.ActionLink("Back to List", "Index", "", new { @class = "btn btn-info" })
+</p>

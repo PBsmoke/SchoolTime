@@ -1,0 +1,89 @@
+﻿@model IEnumerable<SchoolTime.Models.tblCourseHD>
+
+@{
+    ViewBag.Title = "รายชื่อวิชาที่เปิดสอน";
+}
+
+<link href="~/Content/dataTables.bootstrap.css" rel="stylesheet">
+<script src="~/Scripts/dataTables/jquery.dataTables.js"></script>
+<script src="~/Scripts/dataTables/dataTables.bootstrap.js"></script>
+
+<h2>รายชื่อวิชาที่เปิดสอน</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create", new { }, new { @class = "btn btn-warning" })
+</p>
+<table class="table table-striped " id="myTable" >
+    <thead>
+        <tr>
+            <th>
+                @*@Html.DisplayNameFor(model => model.tblSuject.SujectCode)*@
+                @Html.DisplayName("รายวิชา")
+            </th>
+            <th>
+                @*@Html.DisplayNameFor(model => model.tblTeacher.teachCode)*@
+                @Html.DisplayName("อาจารย์")
+            </th>
+            <th>
+                @*@Html.DisplayNameFor(model => model.CourseCode)*@
+                @Html.DisplayName("รหัสการเปิดสอน")
+            </th>
+            <th>
+                @*@Html.DisplayNameFor(model => model.CourseYear)*@
+                @Html.DisplayName("ปีการศึกษา")
+            </th>
+            <th>
+                @*@Html.DisplayNameFor(model => model.Semester)*@
+                @Html.DisplayName("เทอม")
+            </th>
+            <th>
+                @*@Html.DisplayNameFor(model => model.TimeStart)*@
+                @Html.DisplayName("เวลาเริ่ม")
+            </th>
+            <th>
+                @*@Html.DisplayNameFor(model => model.TimeEnd)*@
+                @Html.DisplayName("เวลาสิ้นสุด")
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.tblSuject.SujectName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.tblTeacher.FullName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CourseCode)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CourseYear)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Semester)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.TimeStart_txt)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.TimeEnd_txt)
+        </td>
+        <td style="text-align: right">
+            @Html.ActionLink("Scan QR", "QRCode", new { id = item.CourseHDID }, new { @class = "btn btn-info btn-xs" }) |
+            @Html.ActionLink("Edit", "Edit", new { id = item.CourseHDID }, new { @class = "btn btn-warning btn-xs" }) 
+            @Html.ActionLink("Details", "Details", new { id=item.CourseHDID }, new { @class = "btn btn-primary btn-xs" }) 
+            @Html.ActionLink("Delete", "Delete", new { id=item.CourseHDID }, new { @class = "btn btn-danger btn-xs" })
+        </td>
+    </tr>
+}
+
+</table>
+
+<script>
+    $(document).ready(function () {
+        $('#myTable').DataTable();
+    });
+</script>

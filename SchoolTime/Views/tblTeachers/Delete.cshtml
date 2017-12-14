@@ -1,0 +1,103 @@
+﻿@model SchoolTime.Models.tblTeacher
+
+@{
+    ViewBag.Title = "รายชื่ออาจารย์";
+}
+
+<h2>ข้อมูลอาจารย์</h2>
+<hr />
+<h3>คุณต้องการลบข้อมูลใช่ หรือไม่ ?</h3>
+<div>
+
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayName("หลักสูตร")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.tblMajor.MajorName)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("รหัสอาจารย์")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.teachCode)
+        </dd>
+
+        <dt>
+            @Html.Display("ชื่อ - สกุล")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FullName)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("การศึกษา")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Education)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("ตำแหน่ง")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Position)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("ความชำนาญ")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Expert)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("วันเกิด")
+        </dt>
+
+        <dd>
+            @Html.Display(Model.BirthDate.ToShortDateString())
+        </dd>
+
+        <dt>
+            @Html.DisplayName("เบอร์โทรศัพท์")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Tel)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("Email")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Email)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("หมายเหตุ")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Remark)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-danger" />
+            @Html.ActionLink("Back to List", "Index", "", new { @class = "btn btn-info" })
+        </div>
+    }
+</div>

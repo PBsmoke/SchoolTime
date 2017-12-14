@@ -1,0 +1,116 @@
+﻿@model SchoolTime.Models.tblCourseHD
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>รายชื่อวิชาที่เปิดสอน</h2>
+<hr />
+
+<h3>คุณต้องการลบข้อมูลใช่ หรือไม่ ?</h3>
+<div>
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayName("รายชื่อวิขา")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.tblSuject.SujectName)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("อาจารย์ผู้สอน")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.tblTeacher.FullName)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("รหัสการเปิดสอน")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CourseCode)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("ปีการศึกษา")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CourseYear)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("เทอม")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Semester)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("เวลาเริ่มต้น")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TimeStart_txt)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("เวลาสิ้นสุด")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TimeEnd_txt)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("อนุญาติเข้าสาย")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TimeLate)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("จำนวนคาบเรียน")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.NumCheckIN)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("เปอร์เซ็น มีสิทธิสอบ")
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Entitled)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("เปอร์เซ็น ติดต่ออาจารย์")
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Contact)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("เปอร์เซ็น หมดสิทธิสอบ")
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.NotEntitled)
+        </dd>
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+        
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-danger" />
+            @Html.ActionLink("Back to List", "Index", "", new { @class = "btn btn-info" })
+        </div>
+    }
+</div>

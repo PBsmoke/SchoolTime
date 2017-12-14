@@ -1,0 +1,86 @@
+﻿@model SchoolTime.Models.tblStudent
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>ข้อมูลนักศึกษา</h2>
+<hr />
+<h3>คุณต้องการลบข้อมูลใช่ หรือไม่ ?</h3>
+<div>
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayName("รหัสนักศึกษา")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.StudCode)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("ชื่อ - สกุล")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FullName)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("สาขา")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.tblMinor.MinorName)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("ชั่นปีที่")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Year)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("วันเกิด")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.BirthDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("เบอร์โทรศัพท์")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Tel)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("E-mail")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Email)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("หมายเหตุ")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Remark)
+        </dd>
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+        <div class="form-group">
+            <div class="form-actions no-color">
+                <input type="submit" value="Delete" class="btn btn-danger" />
+                @Html.ActionLink("Back to List", "Index", "", new { @class = "btn btn-info" })
+            </div>
+         </div>
+     }
+        </div>

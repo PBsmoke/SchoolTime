@@ -1,0 +1,149 @@
+﻿@model SchoolTime.Models.tblStudent
+
+@{
+    ViewBag.Title = "ข้อมูลนักศึกษา";
+}
+
+@{
+    var TempRelateTable = "";
+    var TempRelateEmpID = "";
+}
+
+@if (!string.IsNullOrEmpty(Session["relateTable"] as string))
+{
+    TempRelateTable = Session["relateTable"].ToString();
+}
+
+@if (!string.IsNullOrEmpty(Session["relateID"] as string))
+{
+    TempRelateEmpID = Session["relateID"].ToString();
+}
+
+<h2>ข้อมูลนักศึกษา</h2>
+<script type="text/javascript" src="~/Scripts/jquery.min.js"></script>
+<script type="text/javascript" src="~/Scripts/jquery.qrcode.min.js"></script>
+<script type="text/javascript" src="~/Scripts/html2canvas.js"></script>
+
+<div class="form-group">
+    <hr />
+    <dl class="dl-horizontal">
+
+        @Html.EditorFor(model => model.StudID, new { htmlAttributes = new { type = "hidden", @class = "form-control", style = "display: table-cell;" } })
+        @Html.EditorFor(model => model.StudCode, new { htmlAttributes = new { type = "hidden", @class = "form-control", style = "display: table-cell;" } })
+
+        <dt>
+            @Html.DisplayName("รหัสนักศึกษา")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.StudCode)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("ชื่อ - สกุล")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FullName)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("สาขา")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.tblMinor.MinorName)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("ชั่นปีที่")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Year)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("วันเกิด")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.BirthDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("เบอร์โทรศัพท์")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Tel)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("E-mail")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Email)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("หมายเหตุ")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Remark)
+        </dd>
+    </dl>
+    <div>
+        <h3>See Barcode</h3>
+    </div>
+    <div id="QRCode" style="    
+                        padding: 10px 10px 10px 10px;  
+                        margin: 0px 0px 0px 0px; 
+                        background-color: white;
+                        width: 276px;
+                        height: 276px;">
+        <div id="output"></div>
+    </div>
+
+    <p>
+
+    </p>
+    <button type="button" id="btn-Preview-Image"" class="btn btn-info">Download</button>
+    <p>
+
+    </p>
+    <div>
+        @Html.ActionLink("Edit", "Edit", new { id = Model.StudID }, new { @class = "btn btn-warning" })
+        @if (TempRelateTable != "tblStudent")
+        {
+            @Html.ActionLink("Back to List", "Index", "", new { @class = "btn btn-info" })
+        }
+    </div>
+</div>
+<div id="img-out">
+
+</div>
+
+
+<script>
+    jQuery(function () {
+        var StudCode = $("#StudCode").val();
+        jQuery('#output').qrcode(StudCode);
+    })
+
+    $("#btn-Preview-Image").on('click', function () {
+        html2canvas($('#QRCode'),
+            {
+                onrendered: function (canvas) {
+                    var a = document.createElement('a');
+                    // toDataURL defaults to png, so we need to request a jpeg, then convert for file download.
+                    a.href = canvas.toDataURL("image/jpeg").replace("image/jpeg", "image/octet-stream");
+                    a.download = $("#StudCode").val() + '.jpg';
+                    a.click();
+                }
+            });
+    });
+
+</script>

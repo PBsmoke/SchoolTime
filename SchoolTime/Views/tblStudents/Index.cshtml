@@ -1,0 +1,68 @@
+﻿@model IEnumerable<SchoolTime.Models.tblStudent>
+@{
+    ViewBag.Title = "รายชื่อนักศึกษา";
+}
+
+<link href="~/Content/dataTables.bootstrap.css" rel="stylesheet">
+<script src="~/Scripts/dataTables/jquery.dataTables.js"></script>
+<script src="~/Scripts/dataTables/dataTables.bootstrap.js"></script>
+
+<h2>รายชื่อนักศึกษา</h2>
+<p>
+    @Html.ActionLink("Create New", "Create", new { }, new { @class = "btn btn-warning" })
+</p>
+<p>
+    
+</p>
+<table class="table table-striped " id="myTable">
+    <thead>
+        <tr>
+            <th>
+                @Html.ActionLink("รหัสนักศึกษา", "Index", new { sortOrder = "StudCode", currentFilter = ViewBag.CurrentFilter })
+            </th>
+            <th>
+                @Html.ActionLink("ชื่อ - สกุล", "Index", new { sortOrder = "Fullname", currentFilter = ViewBag.CurrentFilter })
+            </th>
+            <th>
+                @Html.ActionLink("ปีการศึกษา", "Index", new { sortOrder = "Year", currentFilter = ViewBag.CurrentFilter })
+            </th>
+            <th>
+                @Html.ActionLink("สาขาวิชา", "Index", new { sortOrder = "MinorName", currentFilter = ViewBag.CurrentFilter })
+            </th>
+
+            <th></th>
+        </tr>
+    </thead>
+    
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.StudCode)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FullName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Year)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.tblMinor.MinorName)
+            </td>
+
+            <td style="text-align: right">
+                @Html.ActionLink("Edit", "Edit", new { id = item.StudID }, new { @class = "btn btn-warning btn-xs" })
+                @Html.ActionLink("Details", "Details", new { id = item.StudID }, new { @class = "btn btn-primary btn-xs" })
+                @Html.ActionLink("Delete", "Delete", new { id = item.StudID }, new { @class = "btn btn-danger btn-xs" })
+            </td>
+        </tr>
+    }
+
+</table>
+
+<script>
+    $(document).ready(function () {
+        $('#myTable').DataTable();
+    });
+</script>

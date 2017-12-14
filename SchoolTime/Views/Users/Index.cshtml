@@ -1,0 +1,47 @@
+﻿@model IEnumerable<SchoolTime.Models.tblUser>
+
+@{
+    ViewBag.Title = "ข้อมูลผู้ใช้";
+}
+
+<link href="~/Content/dataTables.bootstrap.css" rel="stylesheet">
+<script src="~/Scripts/dataTables/jquery.dataTables.js"></script>
+<script src="~/Scripts/dataTables/dataTables.bootstrap.js"></script>
+
+<h2>ข้อมูลผู้ใช้</h2>
+<hr />
+
+<p>
+    @Html.ActionLink("Create New", "Create", new { }, new { @class = "btn btn-warning" })
+</p>
+
+    <table class="table table-striped " id="myTable">
+         <thead>
+             <tr>
+                 <th>
+                     @Html.DisplayName("Username")
+                 </th>
+                 <th></th>
+             </tr>
+         </thead>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.UserName)
+            </td>
+            <td style="text-align: right">
+                @Html.ActionLink("Edit", "Edit", new { id = item.UserID }, new { @class = "btn btn-warning btn-xs" })
+                @Html.ActionLink("Delete", "Delete", new { id = item.UserID }, new { @class = "btn btn-danger btn-xs" })
+            </td>
+        </tr>
+    }
+
+</table>
+
+<script>
+    $(document).ready(function () {
+        $('#myTable').DataTable();
+    });
+</script>

@@ -1,0 +1,84 @@
+﻿
+@{
+    ViewBag.Title = "รายวิชาที่เปิดสอน";
+}
+
+<link href="~/Content/dataTables.bootstrap.css" rel="stylesheet">
+<script src="~/Scripts/dataTables/jquery.dataTables.js"></script>
+<script src="~/Scripts/dataTables/dataTables.bootstrap.js"></script>
+
+<h2>รายวิชาที่เปิดสอน</h2>
+
+<table class="table table-striped " id="myTable">
+    <thead>
+        <tr>
+            <th>
+                @*@Html.DisplayNameFor(model => model.tblSuject.SujectCode)*@
+                @Html.DisplayName("รายวิชา")
+            </th>
+            <th>
+                @*@Html.DisplayNameFor(model => model.tblTeacher.teachCode)*@
+                @Html.DisplayName("อาจารย์")
+            </th>
+            <th>
+                @*@Html.DisplayNameFor(model => model.CourseCode)*@
+                @Html.DisplayName("รหัสการเปิดสอน")
+            </th>
+            <th>
+                @*@Html.DisplayNameFor(model => model.CourseYear)*@
+                @Html.DisplayName("ปีการศึกษา")
+            </th>
+            <th>
+                @*@Html.DisplayNameFor(model => model.Semester)*@
+                @Html.DisplayName("เทอม")
+            </th>
+            <th>
+                @*@Html.DisplayNameFor(model => model.TimeStart)*@
+                @Html.DisplayName("เวลาเริ่ม")
+            </th>
+            <th>
+                @*@Html.DisplayNameFor(model => model.TimeEnd)*@
+                @Html.DisplayName("เวลาสิ้นสุด")
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+</table>
+
+<script>
+    $(document).ready(function () {
+        $('#myTable').DataTable();
+    });
+
+    $.ajax({
+        type: 'POST',
+        dataType: 'json',
+        contentType: 'application/json; charset=utf-8',
+        url: 'getStudentsCourse',
+        success: function (result) {
+            debugger;
+            var addTR = "";
+            if (result.length > 0) {
+                for (var i = 0; i < result.length; i++) {
+                    var datadetail = $('#myTable').DataTable();
+
+                    datadetail.row.add([
+                        result[i].SujectName,
+                        result[i].FullName,
+                        result[i].CourseCode,
+                        result[i].CourseYear,
+                        result[i].Semester,
+                        result[i].TimeStart_txt,
+                        result[i].TimeEnd_txt,
+                        "<a class='btn btn-primary btn-xs' href='/tblCourseHDs/Details/" + result[i].CourseHDID + "' > Details</a ></td >"
+
+                    ]).draw(false);
+                }
+            }
+        },
+        error: function (reresponse) {
+            debugger;
+            //alert(reresponse);
+        }
+    });
+</script>

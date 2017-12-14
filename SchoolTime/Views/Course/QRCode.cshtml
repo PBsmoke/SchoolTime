@@ -1,0 +1,309 @@
+﻿@model SchoolTime.Models.tblCourseHD
+@{
+    
+}
+
+<html>
+<head>
+    <title>Scanner demo</title>
+    <link href="~/Content/bootstrap.css" rel="stylesheet">
+    <style type="text/css">
+        .scanner-laser {
+            position: absolute;
+            margin: 40px;
+            height: 30px;
+            width: 30px;
+        }
+
+        .laser-leftTop {
+            top: 0;
+            left: 0;
+            border-top: solid red 5px;
+            border-left: solid red 5px;
+        }
+
+        .laser-leftBottom {
+            bottom: 0;
+            left: 0;
+            border-bottom: solid red 5px;
+            border-left: solid red 5px;
+        }
+
+        .laser-rightTop {
+            top: 0;
+            right: 0;
+            border-top: solid red 5px;
+            border-right: solid red 5px;
+        }
+
+        .laser-rightBottom {
+            bottom: 0;
+            right: 0;
+            border-bottom: solid red 5px;
+            border-right: solid red 5px;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div id="QR-Code" class="container" style="width:100%">
+        <div class="panel panel-primary">
+            <div class="panel-heading" style="display: inline-block;width: 100%;">
+                <input type="hidden" id="SujectName" value="@Model.tblSuject.SujectName" />
+                <input type="hidden" id="SujectID" value="@Model.tblSuject.SujectID" />
+                <input type="hidden" id="CourseHDID" value="@Model.CourseHDID" />
+                <h4 style="width:50%;float:left;">วิชา : @Model.tblSuject.SujectName</h4>
+                <div style="float:right">
+                    @Html.DropDownListFor(m => m.NumCheckIN, Enumerable.Range(1, 
+                   (int)@Model.NumCheckIN).Select(i => new SelectListItem { Text = i.ToString(), Value = i.ToString() }), 
+                   new { @class = "form-control" })
+                </div>
+
+                
+                <div style="width:50%;float:right;margin-top: 5px;margin-bottom: 5px;text-align: right;">
+                    <select id="cameraId" class="form-control" style="display: inline-block;width: auto;"></select>
+                    <button id="play" data-toggle="tooltip" title="Play" type="button" class="btn btn-success btn-sm"><span class="glyphicon glyphicon-play"></span></button>
+                    <button id="stop" data-toggle="tooltip" title="Stop" type="button" class="btn btn-warning btn-sm"><span class="glyphicon glyphicon-stop"></span></button>
+                    <button id="stopAll" data-toggle="tooltip" title="Stop streams" type="button" class="btn btn-danger btn-sm"><span class="glyphicon glyphicon-stop"></span></button>
+                </div>
+            </div>
+            <div class="panel-body">
+                <div class="col-md-6" style="text-align: center;">
+                    <div class="well" style="position: relative;display: inline-block;">
+                        <canvas id="qr-canvas" width="480" height="480"></canvas>
+                        <div class="scanner-laser laser-rightBottom" style="opacity: 0.5;"></div>
+                        <div class="scanner-laser laser-rightTop" style="opacity: 0.5;"></div>
+                        <div class="scanner-laser laser-leftBottom" style="opacity: 0.5;"></div>
+                        <div class="scanner-laser laser-leftTop" style="opacity: 0.5;"></div>
+                    </div>
+                </div>
+                <div class="col-md-6" style="text-align: center;">
+                    <div id="result" class="thumbnail">
+                        <div class="caption">
+                            <div id="clock" style="font-size: 300%;">23:37:25</div>
+                                10:10:10
+                            </div>
+                                <h3>Scanned result</h3>
+                                @*<input type="text" class="form-control" id="scanned-QR">*@
+                                <p id="scanned-QR"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-footer">
+            </div>
+        </div>
+    </div>
+</body>
+<script type="text/javascript">
+    setInterval(startTime, 500);
+    function startTime() {
+        var time = new Date();
+        var h = time.getHours();
+        var m = time.getMinutes();
+        var s = time.getSeconds();
+
+        m = checkTime(m);
+        s = checkTime(s);
+        document.getElementById('clock').innerHTML =
+            h + ":" + m + ":" + s;
+        var t = setTimeout(startTime, 500);
+    }
+    function checkTime(i) {
+        if (i < 10) { i = "0" + i };  // add zero in front of numbers < 10
+        return i;
+    }
+</script>
+
+<script type="text/javascript" src="~/Scripts/jquery-2.1.1.min.js"></script>
+<script type="text/javascript" src="~/Scripts/bootstrap.min.js"></script>
+<script type="text/javascript" src="~/Scripts/qrcodelib.js"></script>
+<script type="text/javascript" src="~/Scripts/DecoderWorker.js"></script>
+<script type="text/javascript" src="~/Scripts/WebCodeCam.js"></script>
+<script>
+    (function (window) {
+        'use strict';
+        var decoder = $('#qr-canvas'),
+            sl = $('.scanner-laser'),
+            pl = $('#play'),
+            si = $('#scanned-img'),
+            sQ = $('#scanned-QR'),
+            SujectName = $('#SujectName').val(),
+            SujectID = $('#SujectID').val(),
+            CourseHDID = $('#CourseHDID').val(),
+            NumCheckIN = $('#NumCheckIN').val(),
+            sv = $('#save'),
+            sp = $('#stop'),
+            spAll = $('#stopAll'),
+            co = $('#contrast'),
+            cov = $('#contrast-value'),
+            zo = $('#zoom'),
+            zov = $('#zoom-value'),
+            br = $('#brightness'),
+            brv = $('#brightness-value'),
+            tr = $('#threshold'),
+            trv = $('#threshold-value'),
+            sh = $('#sharpness'),
+            shv = $('#sharpness-value'),
+            gr = $('#grayscale'),
+            grv = $('#grayscale-value');
+        $('[data-toggle="tooltip"]').tooltip();
+        sl.css('opacity', .5);
+
+        function saveCheckTime(CourseHDID, StudID, NumCheckIN) {
+            $.ajax(
+                {
+                    type: "POST", //HTTP POST Method  
+                    url: "/tblCourseHDs/SaveCheckTime", // Controller/View   
+                    data: {
+                        CourseHDID: CourseHDID,
+                        StudID: StudID,
+                        NumCheck: NumCheckIN
+                    }
+                    
+                });
+        }
+        pl.click(function () {
+            if (typeof decoder.data().plugin_WebCodeCam == "undefined") {
+                decoder.WebCodeCam({
+                    videoSource: {
+                        id: $('select#cameraId').val(),
+                        maxWidth: 640,
+                        maxHeight: 480
+                    },
+                    autoBrightnessValue: 120,
+                    resultFunction: function (text, imgSrc) {
+                        si.attr('src', imgSrc);
+                        sQ.text(text);
+                        saveCheckTime(CourseHDID, text, NumCheckIN);
+                        setInterval(sQ.text('Scanning ...'),1000);
+                        sQ.text('Scanning ...');
+
+                        sl.fadeOut(150, function () {
+                            sl.fadeIn(150);
+                        });
+                    },
+                    getUserMediaError: function () {
+                        alert('Sorry, the browser you are using doesn\'t support getUserMedia');
+                    },
+                    cameraError: function (error) {
+                        var p, message = 'Error detected with the following parameters:\n';
+                        for (p in error) {
+                            message += p + ': ' + error[p] + '\n';
+                        }
+                        alert(message);
+                    }
+                });
+                sQ.text('Scanning ...');
+                sv.removeClass('disabled');
+                sp.click(function (event) {
+                    sv.addClass('disabled');
+                    sQ.text('Stopped');
+                    decoder.data().plugin_WebCodeCam.cameraStop();
+                });
+                spAll.click(function (event) {
+                    sv.addClass('disabled');
+                    sQ.text('Stopped');
+                    decoder.data().plugin_WebCodeCam.cameraStopAll();
+                });
+            } else {
+                sv.removeClass('disabled');
+                sQ.text('Scanning ...');
+                decoder.data().plugin_WebCodeCam.cameraPlay();
+            }
+        });
+        sv.click(function () {
+            if (typeof decoder.data().plugin_WebCodeCam == "undefined") return;
+            var src = decoder.data().plugin_WebCodeCam.getLastImageSrc();
+            si.attr('src', src);
+        });
+        Page.changeZoom = function (a) {
+            if (typeof decoder.data().plugin_WebCodeCam == "undefined") return;
+            var value = typeof a != 'undefined' ? parseFloat(a.toPrecision(2)) : zo.val() / 10;
+            zov.text(zov.text().split(':')[0] + ': ' + value.toString());
+            decoder.data().plugin_WebCodeCam.options.zoom = parseFloat(value);
+            if (typeof a != 'undefined') zo.val(a * 10);
+        }
+        Page.changeContrast = function () {
+            if (typeof decoder.data().plugin_WebCodeCam == "undefined") return;
+            var value = co.val();
+            cov.text(cov.text().split(':')[0] + ': ' + value.toString());
+            decoder.data().plugin_WebCodeCam.options.contrast = parseFloat(value);
+        }
+        Page.changeBrightness = function () {
+            if (typeof decoder.data().plugin_WebCodeCam == "undefined") return;
+            var value = br.val();
+            brv.text(brv.text().split(':')[0] + ': ' + value.toString());
+            decoder.data().plugin_WebCodeCam.options.brightness = parseFloat(value);
+        }
+        Page.changeThreshold = function () {
+            if (typeof decoder.data().plugin_WebCodeCam == "undefined") return;
+            var value = tr.val();
+            trv.text(trv.text().split(':')[0] + ': ' + value.toString());
+            decoder.data().plugin_WebCodeCam.options.threshold = parseFloat(value);
+        }
+        Page.changeSharpness = function () {
+            if (typeof decoder.data().plugin_WebCodeCam == "undefined") return;
+            var value = sh.prop('checked');
+            if (value) {
+                shv.text(shv.text().split(':')[0] + ': on');
+                decoder.data().plugin_WebCodeCam.options.sharpness = [0, -1, 0, -1, 5, -1, 0, -1, 0];
+            } else {
+                shv.text(shv.text().split(':')[0] + ': off');
+                decoder.data().plugin_WebCodeCam.options.sharpness = [];
+            }
+        }
+        Page.changeGrayscale = function () {
+            if (typeof decoder.data().plugin_WebCodeCam == "undefined") return;
+            var value = gr.prop('checked');
+            if (value) {
+                grv.text(grv.text().split(':')[0] + ': on');
+                decoder.data().plugin_WebCodeCam.options.grayScale = true;
+            } else {
+                grv.text(grv.text().split(':')[0] + ': off');
+                decoder.data().plugin_WebCodeCam.options.grayScale = false;
+            }
+        }
+        var getZomm = setInterval(function () {
+            var a;
+            try {
+                a = decoder.data().plugin_WebCodeCam.optimalZoom();
+            } catch (e) {
+                a = 0;
+            }
+            if (a != 0) {
+                Page.changeZoom(a);
+                clearInterval(getZomm);
+            }
+        }, 500);
+
+        function gotSources(sourceInfos) {
+            for (var i = 0; i !== sourceInfos.length; ++i) {
+                var sourceInfo = sourceInfos[i];
+                var option = document.createElement('option');
+                option.value = sourceInfo.id;
+                if (sourceInfo.kind === 'video') {
+                    var face = sourceInfo.facing == '' ? 'unknown' : sourceInfo.facing;
+                    option.text = sourceInfo.label || 'camera ' + (videoSelect.length + 1) + ' (facing: ' + face + ')';
+                    videoSelect.appendChild(option);
+                }
+            }
+        }
+        if (typeof MediaStreamTrack.getSources !== 'undefined') {
+            var videoSelect = document.querySelector('select#cameraId');
+            $(videoSelect).change(function (event) {
+                if (typeof decoder.data().plugin_WebCodeCam !== "undefined") {
+                    decoder.data().plugin_WebCodeCam.options.videoSource.id = $(this).val();
+                    decoder.data().plugin_WebCodeCam.cameraStop();
+                    decoder.data().plugin_WebCodeCam.cameraPlay(false);
+                }
+            });
+            MediaStreamTrack.getSources(gotSources);
+        } else {
+            document.querySelector('select#cameraId').remove();
+        }
+    }).call(window.Page = window.Page || {});
+
+</script>
+</html>

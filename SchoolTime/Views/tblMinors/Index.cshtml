@@ -1,0 +1,64 @@
+﻿@model IEnumerable<SchoolTime.Models.tblMinor>
+
+@{
+    ViewBag.Title = "สาขาวิชา";
+}
+
+<link href="~/Content/dataTables.bootstrap.css" rel="stylesheet">
+<script src="~/Scripts/dataTables/jquery.dataTables.js"></script>
+<script src="~/Scripts/dataTables/dataTables.bootstrap.js"></script>
+
+<h2>สาขาวิชา</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create", new { }, new { @class = "btn btn-warning" })
+</p>
+<table class="table table-striped " id="myTable">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayName("หลักสูตร")
+            </th>
+            <th>
+                @Html.DisplayName("รหัสสาขาวิชา")
+            </th>
+            <th>
+                @Html.DisplayName("ชื่อสาขาวิชา")
+            </th>
+            <th>
+                @Html.DisplayName("รายละเอียด")
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.tblMajor.MajorName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MinorCode)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MinorName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MinorDetail)
+            </td>
+            <td style="text-align: right">
+                @Html.ActionLink("Edit", "Edit", new { id = item.MinorID }, new { @class = "btn btn-warning btn-xs" })
+                @Html.ActionLink("Details", "Details", new { id = item.MinorID }, new { @class = "btn btn-primary btn-xs" })
+                @Html.ActionLink("Delete", "Delete", new { id = item.MinorID }, new { @class = "btn btn-danger btn-xs" })
+            </td>
+        </tr>
+    }
+
+</table>
+
+<script>
+    $(document).ready(function () {
+        $('#myTable').DataTable();
+    });
+</script>

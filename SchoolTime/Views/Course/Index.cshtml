@@ -1,0 +1,138 @@
+﻿@model IEnumerable<SchoolTime.Models.uv_Course>
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+</head>
+<body>
+    <p>
+        @Html.ActionLink("Create New", "Create")
+    </p>
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.CourseYear)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Semester)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FullNameT)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SujectID)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SujectName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TimeLate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NumCheckIN)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Entitled)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NotEntitled)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Contact)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CourseDTID)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StudID)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StudCode)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FullNameS)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MinorID)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MinorCode)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MinorName)
+            </th>
+            <th></th>
+        </tr>
+    
+    @foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.CourseYear)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Semester)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FullNameT)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SujectID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SujectName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TimeLate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NumCheckIN)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Entitled)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NotEntitled)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Contact)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CourseDTID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StudID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StudCode)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FullNameS)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MinorID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MinorCode)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MinorName)
+            </td>
+            <td>
+                @Html.ActionLink("QRCode", "QRCode", new { id = item.CourseHDID }) |
+                @Html.ActionLink("Edit", "Edit", new { id = item.CourseHDID }) |
+                @Html.ActionLink("Details", "Details", new { id = item.CourseHDID }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.CourseHDID })
+            </td>
+        </tr>
+    }
+    
+    </table>
+</body>
+</html>

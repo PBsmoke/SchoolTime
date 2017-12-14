@@ -1,0 +1,35 @@
+﻿@model SchoolTime.Models.tblUser
+
+@{
+    ViewBag.Title = "ข้อมูลผู้ใช้";
+}
+
+<h2>ข้อมูลผู้ใช้</h2>
+<hr />
+
+    <div>
+        <h4>tblUser</h4>
+        <hr />
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayName("Username")
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.UserName)
+            </dd> 
+            <dt>
+                @Html.DisplayName("หมายเหตุ")
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.Remark)
+            </dd>
+    
+        </dl>
+    </div>
+    <p>
+        @Html.ActionLink("Edit", "Edit", new { id = Model.UserID }) |
+        @Html.ActionLink("Back to List", "Index")
+    </p>
+

@@ -1,0 +1,47 @@
+﻿@model SchoolTime.Models.tblSuject
+
+@{
+    ViewBag.Title = "รายชื่อวิชา";
+}
+
+<h2>รายชื่อวิชา</h2>
+<hr />
+
+<h3>คุณต้องการลบข้อมูลใช่ หรือไม่ ?</h3>
+<div>
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayName("รหัสรายชื่อวิชา")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.SujectCode)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("ชื่อรายชื่อวิชา")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.SujectName)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("รายละเอียดวิชา")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.SujectDetail)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-danger" />
+            @Html.ActionLink("Back to List", "Index", "", new { @class = "btn btn-info" })
+        </div>
+    }
+</div>

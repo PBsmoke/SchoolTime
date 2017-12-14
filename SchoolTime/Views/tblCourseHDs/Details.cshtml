@@ -1,0 +1,339 @@
+﻿@model SchoolTime.Models.tblCourseHD
+
+@{
+    ViewBag.Title = "รายชื่อวิชาที่เปิดสอน";
+}
+
+@{
+    var TempRelateTable = "";
+    var TempRelateEmpID = "";
+}
+
+
+    @if (!string.IsNullOrEmpty(Session["relateTable"] as string))
+    {
+        TempRelateTable = Session["relateTable"].ToString();
+    }
+
+    @if (!string.IsNullOrEmpty(Session["relateID"] as string))
+    {
+        TempRelateEmpID = Session["relateID"].ToString();
+    }
+
+
+
+
+
+
+
+<h2>รหัสการเปิดสอน : @Model.CourseCode ,วิชา : @Model.tblSuject.SujectName</h2>
+
+<div>
+    <div style="align-content:center;">
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayName("รายชื่อวิขา")
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.tblSuject.SujectName)
+            </dd>
+
+            <dt>
+                @Html.DisplayName("อาจารย์ผู้สอน")
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.tblTeacher.FullName)
+            </dd>
+
+            <dt>
+                @Html.DisplayName("รหัสการเปิดสอน")
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.CourseCode)
+            </dd>
+
+            <dt>
+                @Html.DisplayName("ปีการศึกษา")
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.CourseYear)
+            </dd>
+
+            <dt>
+                @Html.DisplayName("เทอม")
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Semester)
+            </dd>
+
+            <dt>
+                @Html.DisplayName("เวลาเริ่มต้น")
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.TimeStart_txt)
+            </dd>
+
+            <dt>
+                @Html.DisplayName("เวลาสิ้นสุด")
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.TimeEnd_txt)
+            </dd>
+
+            <dt>
+                @Html.DisplayName("อนุญาติเข้าสาย")
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.TimeLate)
+            </dd>
+
+            <dt>
+                @Html.DisplayName("จำนวนคาบเรียน")
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.NumCheckIN)
+            </dd>
+
+            <dt>
+                @Html.DisplayName("เปอร์เซ็น มีสิทธิสอบ")
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Entitled)
+            </dd>
+
+            <dt>
+                @Html.DisplayName("เปอร์เซ็น ติดต่ออาจารย์")
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Contact)
+            </dd>
+
+            <dt>
+                @Html.DisplayName("เปอร์เซ็น หมดสิทธิสอบ")
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.NotEntitled)
+            </dd>
+        </dl>
+    </div>
+</div>
+
+
+<input name="b_print" class="btn btn-info" type="button" class="ipt" onclick="printing()" value=" Print ">
+<input type="hidden" id="hidHDID" value="@Model.CourseHDID" />
+<input type="hidden" id="hidNumIN" value="@Model.NumCheckIN" />
+<input type="hidden" id="hidTimeStart" value="@Model.TimeStart_txt" />
+<input type="hidden" id="hidTimeminLate" value="" />
+<input type="hidden" id="hidTimeLate" value="@Model.TimeLate" />
+<input type="hidden" id="hidEntitled" value="@Model.Entitled" />
+<input type="hidden" id="hidNotEnt" value="@Model.NotEntitled" />
+<input type="hidden" id="hidContact" value="@Model.Contact" />
+
+
+<div class="container" id="ReportFrom" style="overflow:scroll;">
+    <h2 class="text-center">รายงานข้อมูลการลงเวลาเรียน</h2>
+    <h4 class="text-center">@Model.tblSuject.SujectName</h4>
+    <table class="table table-bordered" id="TableDT">
+        <thead>
+            <tr>
+                <th rowspan="2">
+                    @Html.DisplayName("รหัสนักศึกษา")
+                </th>
+                <th rowspan="2">
+                    @Html.DisplayName("ชื่อ - สกุล")
+                </th>
+                <th colspan="@Model.NumCheckIN">
+                    ข้อมูลการเข้าเรียน
+                </th>
+                <th rowspan="2">
+                    สถานะ
+                </th>
+            </tr>
+            <tr>
+                @{
+                    for (int i = 0; i < @Model.NumCheckIN; i++)
+                    {
+                        <td align='center'>
+                            @((i + 1).ToString())
+                        </td>
+                    }
+                }
+
+            </tr>
+        </thead>
+        <tbody id="myTable"></tbody>
+       
+    </table>
+    <div></div>
+    <p id="sumEntitled"></p>
+    <p id="sumNotEntitled"></p>
+    <p id="sumContact"></p>
+    <div></div>
+</div>
+
+<p>
+    @if (TempRelateTable != "tblStudent")
+    {
+        <div>
+            <br />
+            @Html.ActionLink("Edit", "Edit", new { id = Model.CourseHDID }, new { @class = "btn btn-warning" })
+            @Html.ActionLink("Back to List", "Index", "", new { @class = "btn btn-info" })
+        </div>
+    }
+</p>
+
+<script>
+    $(document).ready(function () {
+        var stmin = ConvertTimetoMin($("#hidTimeStart").val());
+        var latemin = parseInt($("#hidTimeLate").val());
+        var minover = stmin + latemin;
+        $("#hidTimeminLate").val(minover);
+    });
+
+    function printing() {
+        var headstr = "<style>@@page{size:landscape;}</style><html><head></head><body>";
+        var footstr = "</body>";
+        var newstr = document.all.item('ReportFrom').innerHTML;
+        var oldstr = document.body.innerHTML;
+        document.body.innerHTML = headstr + newstr + footstr;
+        window.print();
+        document.body.innerHTML = oldstr;
+        return false;
+    }
+    var detaildata
+    getdetail().success(detail);
+    function detail() {
+        return $.ajax({
+            type: 'GET',
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8',
+            url: '/tblCourseHDs/getDetail',
+            data: { CourseHDID: $("#hidHDID").val() },
+            success: function (result) {
+                var sumlate = []; 
+                for (var j = 1; j <= $("#hidNumIN").val(); j++) {
+                    sumlate[j] = 0
+                }
+                var sumpass = 0
+                var sumnot = 0
+                var sumalert = 0
+                var addTR = "";
+                var addTR = "<tbody>";
+                for (var i = 0; i < result.length; i++) {
+                    addTR += "<tr>";
+                    addTR += "<td>" + result[i].StudCode + "</td>";
+                    addTR += "<td nowrap>" + result[i].FullName + "</td>";
+
+                    var Statust = 0
+                    for (var j = 1; j <= $("#hidNumIN").val(); j++)
+                    {
+                        var k = 0; var s = 0;
+                        if (detaildata.length > 0) {
+                            for (k; k < detaildata.length; k++) {
+                                if (j == detaildata[k].NumCheck && detaildata[k].StudID == result[i].StudID) {
+                                    var times = detaildata[k].TimeCheck.substr(6, 13);
+                                    var now = new Date(Number(times));
+                                    var now2 = now.toTimeString().substr(0, 8);
+                                    //addTR += "<td>" + now2 + "</td>";
+                                    var mintime = ConvertTimetoMin(now2);
+                                    if ($("#hidTimeminLate").val() < mintime)
+                                    {
+                                        sumlate[j] = (sumlate[j] + 1)
+                                        addTR += "<td align='center'>สาย</td>";
+                                    }
+                                    else {
+                                        sumlate[j] = (sumlate[j] + 0)
+                                        addTR += "<td align='center'>&#10003;</td>";
+                                    }
+                                    Statust = (parseInt(Statust)+1);
+                                    s = 1;
+                                }
+                                else if (s == 0 && k == (detaildata.length - 1)) {
+                                    addTR += "<td align='center'>-</td>";
+                                }
+
+                            }
+                        }
+                        else {
+                            addTR += "<td>-</td>";
+                        }
+                    }
+                    if (detaildata.length > 0){
+                        var calpass = (($("#hidEntitled").val() / 100) * $("#hidNumIN").val())
+                        var calalert = (($("#NotEntitled").val() / 100) * $("#hidNumIN").val())
+                        var calnot = (($("#hidNotEnt").val() / 100) * $("#hidNumIN").val())
+                        if (Statust >= calpass) {
+                            addTR += "<td nowrap>มีสิทธิ์สอบ</td>";
+                            sumpass++;
+                        }
+                        else if (Statust >= calnot &&  Statust <= calpass) {
+                            addTR += "<td nowrap>ติดต่ิอด่วน</td>";
+                            sumnot++;
+                        }
+                        else if (Statust <= calnot) {
+                            addTR += "<td nowrap>หมดสิทธิ์สอบ</td>";
+                            sumnot++;
+                        }
+                    }
+                    else{
+                        addTR += "<td>ไม่มีการลงเวลา</td>";
+                    }
+                    addTR += "</tr>";
+                }
+                document.getElementById("sumEntitled").innerHTML = "มีสิทธิ์สอบ : " + sumpass + " คน";
+                document.getElementById("sumNotEntitled").innerHTML = "หมดสิทธิ์สอบ : " +sumnot + " คน";
+                document.getElementById("sumContact").innerHTML = "ติดต่อด่วน : " + sumalert + " คน";
+
+                addTR += "</tbody>";
+                addTR += "<tfoot>";
+                addTR += "<td colspan='2'> รวมสาย </td>";
+
+                for (var j = 1; j <= $("#hidNumIN").val(); j++) {
+                    if (detaildata.length > 0) {
+                        addTR += "<td align='center'>" + sumlate[j] + "</td>";
+                    } else {
+                        addTR += "<td></td>";
+                    }
+                }
+                addTR += "<td></td>";
+                addTR += "</tfoot >";
+                $('#TableDT > tbody:last-child').replaceWith(addTR);
+            },
+            error: function (reresponse) {
+                alert(reresponse);
+            }
+        });
+    }
+
+    function getdetail()
+    {
+        return $.ajax({
+            url: '/tblCourseHDs/getDetailTime',
+            type: 'GET',
+            dataType: 'json',
+            data: { CourseHDID: $("#hidHDID").val()},
+            contentType: 'application/json;',
+            success: function (data) {
+                detaildata = data;
+            }
+        });
+    }
+
+    function ConvertTimetoMin(time) {
+        var _min = 0;
+        if (time != "" && time != undefined) {
+            var _t = time.split(':');
+            _min = ((parseInt(_t[0])) * 60) + parseInt(_t[1]);
+        }
+        return _min;
+    }
+</script>

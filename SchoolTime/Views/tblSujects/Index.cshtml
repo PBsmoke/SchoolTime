@@ -1,0 +1,62 @@
+﻿@model IEnumerable<SchoolTime.Models.tblSuject>
+
+
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>รายชื่อวิชา</h2>
+<p>
+    @Html.ActionLink("Create New", "Create", new { }, new { @class = "btn btn-warning" })
+</p>
+
+<link href="~/Content/dataTables.bootstrap.css" rel="stylesheet">
+<script src="~/Scripts/dataTables/jquery.dataTables.js"></script>
+<script src="~/Scripts/dataTables/dataTables.bootstrap.js"></script>
+
+    <div class="panel-body">
+        <div class="table-responsive">
+        <table class="table table-striped " id="myTable">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayName("รหัสรายวิชา")
+                        @*@Html.ActionLink("SujectCode", "Index", new { sortOrder = ViewBag.DateSortParm, currentFilter = ViewBag.CurrentFilter })*@
+                    </th>
+                    <th>
+                        @Html.DisplayName("ชื่อรายวิชา")
+                        @*@Html.ActionLink("SujectName", "Index", new { sortOrder = ViewBag.DateSortParm, currentFilter = ViewBag.CurrentFilter })*@
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+
+            @foreach (var item in Model)
+    {
+
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.SujectCode)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.SujectName)
+        </td>
+        <td style="text-align: right">
+            @Html.ActionLink("Edit", "Edit", new { id = item.SujectID }, new { @class = "btn btn-warning btn-xs" })
+            @Html.ActionLink("Details", "Details", new { id = item.SujectID }, new { @class = "btn btn-primary btn-xs" })
+            @Html.ActionLink("Delete", "Delete", new { id = item.SujectID }, new { @class = "btn btn-danger btn-xs" })
+        </td>
+    </tr>
+    }
+
+        </table>
+        </div>
+    </div>
+
+        <script>
+            $(document).ready(function () {
+                $('#myTable').DataTable();
+            });
+        </script>
